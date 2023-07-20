@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "simple-project"
+version = "0.1.0"
+description = "simple project for testing task"
+authors = ["Zhanat <janat.200066@gmail.com>"]
+readme = "README.md"
+packages = [{include = "simple_project"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sqlalchemy = "^2.0.19"
+alembic = "^1.11.1"
+aiohttp = "^3.8.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
