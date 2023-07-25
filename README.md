@@ -1,4 +1,4 @@
-склонить проект
+склонить проект и переименновать  <strong>env.save на .env </strong>
 
 Первая комманда, ну и последняя <br />
 docker-compose up --build
