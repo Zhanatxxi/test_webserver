@@ -1,5 +1,6 @@
 import io
 from datetime import datetime
+from uuid import UUID
 
 from sqlalchemy import select
 from PIL import Image as pilImage
@@ -11,12 +12,14 @@ from web_app.models import Image
 
 async def save_image(
     uuid,
-    upload_date
+    upload_date,
+    extension_type
 ):
     async with get_db_session() as session:
         image = Image(
             uuid=uuid,
             upload_date=upload_date,
+            extension_type=extension_type
         )
         session.add(image)
         await session.commit()
@@ -24,11 +27,20 @@ async def save_image(
 
 async def search_image_by_token(
     token
-):
+) -> UUID:
     async with get_db_session() as session:
         stmt = select(Image.uuid).where(Image.uuid == token)
         token = await session.scalar(stmt)
         return token
+
+
+async def get_image_by_token(
+    token: str
+) -> Image:
+    async with get_db_session() as session:
+        stmt = select(Image).where(Image.uuid == token)
+        image = await session.scalar(stmt)
+        return image
 
 
 async def set_finished_date(

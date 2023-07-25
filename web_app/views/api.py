@@ -57,13 +57,3 @@ async def upload_file(request: Request):
         logger.debug(f"post called publish with token:{token.hex}")
         return json_response(dict(token=token.hex))
     return json_response(dict(data="not image"))
-
-
-@routes.get("/media/{token}")
-async def media(request: Request):
-    token = request.match_info.get("token", "")
-    await change_last_upload_time(token, datetime.datetime.now())
-
-    async with aiofiles.open(settings.MEDIA_PATH / f"{token}-resized.jpeg", mode='rb') as handle:
-        file = await handle.read()
-        return Response(body=file, content_type="image/jpeg")

@@ -19,7 +19,7 @@ async def process_message(
         image = ImageSchema(**json.loads(message.body))
         file = base64.b64decode(image.file)
 
-        await save_image(image.uuid.hex, image.upload_date)
+        await save_image(image.uuid.hex, image.upload_date, image.extension_type)
         await save_images(image.uuid.hex, image.extension_type, file, image.width, image.height)
 
 

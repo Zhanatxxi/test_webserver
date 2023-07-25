@@ -1,3 +1,3 @@
-#!/bin/zsh
+#!/bin/sh
 
-python app.py && python consume_app.py
+python app.py & python consume_app.py
