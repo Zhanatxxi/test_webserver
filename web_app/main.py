@@ -1,11 +1,9 @@
-from aiohttp import web
-
 from core import create_web_app
-from web_app.views.api import routes
+from web_app.views.api import routes as api_routes
+from web_app.views.app import routes as app_routes
 
-app = create_web_app()
-app.add_routes(routes)
+api = create_web_app()
+api.add_routes(api_routes)
 
 
-if __name__ == '__main__':
-    web.run_app(app)
+

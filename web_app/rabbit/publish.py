@@ -5,7 +5,7 @@ from config.settings import settings
 
 async def publish(message) -> None:
     connection = await aio_pika.connect_robust(
-        "amqp://guest:guest@127.0.0.1/",
+        "amqp://guest:guest@rabbi/",
     )
 
     async with connection:

@@ -1,10 +1,8 @@
 import asyncio
 import base64
-import io
 import json
 
 import aio_pika
-from PIL import Image
 
 from config.settings import settings
 from web_app.schemas import ImageSchema
@@ -22,9 +20,9 @@ async def process_message(
         await save_images(image.uuid.hex, image.extension_type, file, image.width, image.height)
 
 
-async def main() -> None:
+async def consume():
     connection = await aio_pika.connect_robust(
-        "amqp://guest:guest@127.0.0.1/",
+        "amqp://guest:guest@rabbi/",
     )
 
     queue_name = settings.ROUTING_KEY
@@ -42,3 +40,4 @@ async def main() -> None:
         await asyncio.Future()
     finally:
         await connection.close()
+

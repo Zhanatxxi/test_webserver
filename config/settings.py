@@ -14,8 +14,6 @@ class Settings(BaseSettings):
     APP_DIR = BASE_DIR / "src"
     DEBUG: bool
 
-    CELERY_BROKER: str
-
     MEDIA_ROOT = "media"
     MEDIA_PATH = BASE_DIR / "media"
     HOST_NAME: str

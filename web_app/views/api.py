@@ -1,10 +1,8 @@
 import base64
 import datetime
-import io
 from uuid import uuid4
 
 import aiofiles
-from PIL import Image
 from aiohttp.web import (
     Response, RouteTableDef,
     json_response, Request,
@@ -14,7 +12,7 @@ from aiohttp.web import (
 from web_app.schemas import ImageSchema
 from config.settings import settings
 from web_app.rabbit.publish import publish
-from web_app.services import save_image, search_image_by_token, change_last_upload_time
+from web_app.services import search_image_by_token, change_last_upload_time
 
 routes = RouteTableDef()
 
@@ -24,24 +22,13 @@ async def hello(request):
     return Response(text="Hello, world")
 
 
-@routes.get("/data")
-async def json_response_answer(request: Request):
-    return json_response({"data": "hi"})
-
-
-@routes.post("/data")
-async def get_data(request: Request):
-    data = await request.json()
-    return json_response(dict(data=data["data"]))
-
-
 @routes.get("/upload/{token}")
 async def get_image(request: Request):
     token = request.match_info.get("token", "")
     get_token = await search_image_by_token(token)
     if get_token:
-        # return json_response(f"http://localhost:8080/media/{get_token.hex}")
-        raise HTTPFound(f'/media/{get_token.hex}')
+        return json_response(f"http://127.0.0.1:8081/media/{get_token.hex}")
+        # raise HTTPFound(f'/media/{get_token.hex}')
     raise HTTPNotFound()
 
 
