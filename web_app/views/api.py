@@ -10,9 +10,11 @@ from aiohttp.web import (
 )
 
 from web_app.schemas import ImageSchema
-from config.settings import settings
+from config.settings import settings, get_logger
 from web_app.rabbit.publish import publish
 from web_app.services import search_image_by_token, change_last_upload_time
+
+logger = get_logger()
 
 routes = RouteTableDef()
 
@@ -43,6 +45,7 @@ async def upload_file(request: Request):
         filename_extension = image.filename.split(".")[-1]
         img_content = image.file.read()
         image_base64 = base64.b64encode(img_content).decode('utf-8')
+        logger.debug("pre calling publish")
         await publish(ImageSchema(
             width=width,
             height=height,
@@ -51,6 +54,7 @@ async def upload_file(request: Request):
             file=image_base64,
             upload_date=datetime.datetime.now()
         ).json())
+        logger.debug(f"post called publish with token:{token.hex}")
         return json_response(dict(token=token.hex))
     return json_response(dict(data="not image"))
 

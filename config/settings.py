@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -18,8 +19,9 @@ class Settings(BaseSettings):
     MEDIA_PATH = BASE_DIR / "media"
     HOST_NAME: str
 
+    MQ_PATH: str
     ROUTING_KEY: str = 'save_image'
-    PREFETCH_COUNT: int = 10
+    PREFETCH_COUNT: int = 1
 
     DB_USER: str
     DB_PASSWORD: str
@@ -45,6 +47,14 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = f"{Path(__file__).resolve().parent.parent}/.env"
+
+
+def get_logger():
+    logging.basicConfig(
+        level=logging.DEBUG
+    )
+    logger = logging.getLogger(__name__)
+    return logger
 
 
 settings = Settings()

@@ -5,6 +5,7 @@ from aiohttp.web import (
     Response, RouteTableDef,
     Request, json_response
 )
+from aiohttp.web_exceptions import HTTPNotFound
 
 from config.settings import settings
 from web_app.services import search_image_by_token, change_last_upload_time
@@ -15,6 +16,9 @@ routes = RouteTableDef()
 @routes.get("/media/{token}")
 async def media(request: Request):
     token = request.match_info.get("token", "")
+    db_token = await search_image_by_token(token)
+    if not db_token:
+        raise HTTPNotFound()
     await change_last_upload_time(token, datetime.datetime.now())
 
     async with aiofiles.open(settings.MEDIA_PATH / f"{token}-resized.jpeg", mode='rb') as handle:

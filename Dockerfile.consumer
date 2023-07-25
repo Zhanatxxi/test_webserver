@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN chmod +x docker-consumer-entrypoint.sh
+
 EXPOSE 8081
 
-CMD ["python", "app.py", "&", "python", "consume_app.py"]
+CMD ["./docker-consumer-entrypoint.sh"]

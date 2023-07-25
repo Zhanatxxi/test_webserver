@@ -4,9 +4,12 @@ import json
 
 import aio_pika
 
-from config.settings import settings
+from config.settings import settings, get_logger
 from web_app.schemas import ImageSchema
 from web_app.services import save_image, save_images
+
+
+logger = get_logger()
 
 
 async def process_message(
@@ -21,9 +24,13 @@ async def process_message(
 
 
 async def consume():
-    connection = await aio_pika.connect_robust(
-        "amqp://guest:guest@rabbi/",
-    )
+    logger.debug("consume call")
+    try:
+        connection = await aio_pika.connect_robust(
+            settings.MQ_PATH,
+        )
+    except Exception as e:
+        logger.error(e)
 
     queue_name = settings.ROUTING_KEY
 
@@ -38,6 +45,9 @@ async def consume():
     try:
         # Wait until terminate
         await asyncio.Future()
+    except Exception as e:
+        logger.info("Exception in try-except asyncio.Future()")
+        logger.error(e)
     finally:
         await connection.close()
 
