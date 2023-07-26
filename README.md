@@ -11,6 +11,6 @@ POST request form-data body: <br />
 <h3> Response token: uuid </h3>
 этот токет вставляете в запрос
 
-http://127.0.0.1:8080/upload/<token> - <br />
+http://127.0.0.1:8080/upload/token - <br />
 GET request <br />
 в ответ получаете ответ с ссылкой на обрезанный image
